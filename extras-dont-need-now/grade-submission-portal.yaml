@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grade-submission-portal # Name of the frontend or backend app
+  namespace: grade-submission
+  labels:
+    app.kubernetes.io/name: grade-submission
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/instance: grade-submission-portal
+spec:
+  containers:
+  - name: grade-submission-portal
+    image: <Image> # image name from docker hub
+    resources:
+      requests: # minimum resource required to run the container
+        memory: "128Mi" 
+        cpu: "200m"
+      limits: # if dont give limit then all container would try to use as much resource as possible leading to OOM
+        memory: "128Mi"  # dont want to provide limit to cpu as we want to use as much cpu as possible for better performance
+    ports:
+      - containerPort: 5001

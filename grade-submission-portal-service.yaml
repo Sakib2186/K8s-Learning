@@ -1,0 +1,19 @@
+# portforwarding is bad
+# The service is for create node port service which uses the label selector to forward external traffic to the correct pod
+# doint do this in production only for prototyping.
+apiVersion: v1
+kind: Service
+metadata:
+  name: grade-submission-portal
+  namespace: grade-submission
+spec:
+  type: NodePort
+  selector:
+    app.kubernetes.io/instance: grade-submission-portal
+  ports:
+  - port: 5001
+    targetPort: 5001
+    nodePort: 32000 # ranges from 30000 to 32000
+
+# kubectl apply -f grade-submission-portal.yaml
+# kubectl apply -f grade-submission-portal-service.yaml

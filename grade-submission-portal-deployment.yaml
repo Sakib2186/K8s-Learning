@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grade-submission-portal
+  namespace: grade-submission
+spec:
+  replicas: 3 # values of 1 is default
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: grade-submission-portal
+  template:
+    metadata:
+      app.kubernetes.io/name: grade-submission
+      app.kubernetes.io/component: frontend
+      app.kubernetes.io/instance: grade-submission-portal
+  spec:
+    containers:
+    - name: grade-submission-portal
+      image: <Image> # image name from docker hub
+      # if your UI also has endpint to check for healthz and readiness then add them as required
+      livenessProbe: # app sends 200 reponse, healthy. 500 response then not healthy (atleast 1 negative then).
+        httpGet:
+          path: /healthz
+          port: 5001
+        initialDelaySeconds: 15 # while the app is booting up, then would throw error. Giving application time to startup.
+        periodSeconds: 5 # keep checking for healthyness every 5 seconds.
+      readinessProbe: # checks if application is successfully able to fetch external db/api otherwise stop traffic from coming
+        httpGet:
+          path: /readyz 
+          port: 5001
+        initialDelaySeconds: 15 # not needed for readinessProbe
+        periodSeconds: 5 # every 5 second will hit to check
+      resources:
+        requests: # minimum resource required to run the container
+          memory: "128Mi" 
+          cpu: "200m"
+        limits: # if dont give limit then all container would try to use as much resource as possible leading to OOM
+          memory: "128Mi"  # dont want to provide limit to cpu as we want to use as much cpu as possible for better performance
+      ports:
+        - containerPort: 5001
+
+# so can delete the grade-submission-portal.yaml as this will manage the three pods with the instance name
+# service remains as it will forward the traffic to one of the three pods.
