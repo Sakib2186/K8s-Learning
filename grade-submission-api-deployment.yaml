@@ -35,6 +35,11 @@ spec:
             port: 3000
           initialDelaySeconds: 15 # not needed for readinessProbe
           periodSeconds: 5 # every 5 second will hit to check
+        env:
+          - name: MONGODB_HOST
+            value: mongodb
+          - name: MONGODB_PORT
+            value: "27017"
         resources:
           requests:
             memory: "128Mi"

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: grade-submission
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: mongodb
+  serviceName: mongodb ## mongodb-3 or mongodb-4. The numbering goes in ascending order.
+  replicas: 2 # mongodb-0 mongodb-1 two stateful pods will be created. If one pod goes down, then the other pod will take over the traffic.
+  template: # pod template each replicas will be generated based on this template
+    metadata:
+      labels:
+        app.kubernetes.io/name: grade-submission
+        app.kubernetes.io/component: database
+        app.kubernetes.io/instance: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:6.0.8
+        ports:
+        - containerPort: 27017 # mongdb deafault port. so need to expose this port to outside world. so container port is 270017
+        volumeMounts: # PVC contenting to storage found by k8s in nodes.
+        - name: mongodb-persistent-storage
+          mountPath: /data/db
+  volumeClaimTemplates: # Persistent volume claim template. since it has two replicas, so two PVC will be created. One binded to mongodb-0 and other binded to mongodb-1.
+  - metadata:
+      name: mongodb-persistent-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ] # only one pod can write to the volume at a time. But, multiple pods can read from the volume.
+      resources:
+        requests:
+          storage: 1Gi
+
+# mongodb-persistent-storage-mongodb-0
+# mongodb-persistent-storage-mongodb-1
