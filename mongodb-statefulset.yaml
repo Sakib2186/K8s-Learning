@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: mongodb
   serviceName: mongodb ## mongodb-3 or mongodb-4. The numbering goes in ascending order.
-  replicas: 2 # mongodb-0 mongodb-1 two stateful pods will be created. If one pod goes down, then the other pod will take over the traffic.
+  replicas: 2 # mongodb-0 mongodb-1 two stateful pods will be created. If one pod goes down, then the other pod will take over the traffic. Its better to keep only 1, and not 2 otherwise service/CLUSTERIP will roundrobin between 2 db, fetching wrong data.
   template: # pod template each replicas will be generated based on this template
     metadata:
       labels:
@@ -19,6 +19,12 @@ spec:
       containers:
       - name: mongodb
         image: mongo:6.0.8
+        # authentication
+        env: # only those statefulset pods that can authenticate with mongodb will be able to connect with the db. So, we need to set the env variables for authentication.
+          - name: MONGO_INITDB_ROOT_USERNAME  # see documentaion for DB type. So in code we can see MONGODB_USER, if this value from api matches admin then ok. same for password.
+            value: admin
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: rootpassword
         ports:
         - containerPort: 27017 # mongdb deafault port. so need to expose this port to outside world. so container port is 270017
         volumeMounts: # PVC contenting to storage found by k8s in nodes.

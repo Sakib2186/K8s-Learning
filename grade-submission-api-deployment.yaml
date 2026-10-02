@@ -35,11 +35,15 @@ spec:
             port: 3000
           initialDelaySeconds: 15 # not needed for readinessProbe
           periodSeconds: 5 # every 5 second will hit to check
-        env:
+        env: # so that api can connect wiht mongodb, this are set in code.
           - name: MONGODB_HOST
             value: mongodb
           - name: MONGODB_PORT
             value: "27017"
+          - name: MONGODB_USER
+            value: admin
+          - name: MONGODB_PASSWORD
+            value: rootpassword
         resources:
           requests:
             memory: "128Mi"
