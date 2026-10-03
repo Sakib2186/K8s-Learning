@@ -30,6 +30,11 @@ spec:
           port: 5001
         initialDelaySeconds: 15 # not needed for readinessProbe
         periodSeconds: 5 # every 5 second will hit to check
+      envFrom:
+        - configMapRef:
+            name: grade-submission-portal-config
+        - secretRef:
+            name: grade-submission-portal-secret
       resources:
         requests: # minimum resource required to run the container
           memory: "128Mi" 
