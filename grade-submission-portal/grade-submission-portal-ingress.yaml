@@ -1,3 +1,5 @@
+# delete namespace of ingress first
+# kubectl delete namespace ingress-nginx
 # ingress-nginx command
 # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
 # this install ingress-nginx controller
@@ -9,6 +11,7 @@ metadata:
   name: grade-submission-portal-ingress
   namespace: grade-submission
 spec:
+  ingressClassName: nginx
   rules: # the ingress rules
   #- host: <Host> # the domain name, in productio keep this and give domain, for loal use http
   - http: # as host disbaled so i am enabling any host from any domain that has / at end to my backend service with the name provided for the cluster ip
@@ -20,3 +23,61 @@ spec:
             name: grade-submission-portal
             port: 
               number: 5001
+
+# now apply it
+# kubectl apply -f grade-submission-portal-ingress.yaml -n grade-submission
+# delete the existing node port service
+# kuberctl delete service grade-submission-portal-service -n grade-submission
+# reapply service now
+# kuberctl apply -f grade-submission-portal-service -n grade-submission
+# then check
+# kubectl get services -n grade-submission
+
+
+# march 2026 ingress-nginx is retired better to follow F5 NGINX INGRESS
+
+# The Kubernetes community NGINX Ingress Controller is being retired in March 2026, but teaching it remains highly valuable as it's still one of the most widely deployed controllers and the core Ingress API concepts transfer directly to all alternatives.
+
+# For production environments, I recommend Traefik or the F5 NGINX Ingress Controller (nginx.org/ingress-controller, which is actively maintained and separate from the retiring community version), as defining an Ingress resource is virtually identical across controllers—only the ingressClassName and occasional annotations differ.
+
+# Code Comparison:
+
+# # NGINX Ingress (Community - retiring March 2026)
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: my-app-ingress
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: myapp.example.com
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: my-app-service
+#             port:
+#               number: 80
+
+
+# # Traefik Ingress (Production Alternative)
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: my-app-ingress
+# spec:
+#   ingressClassName: traefik
+#   rules:
+#   - host: myapp.example.com
+#     http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: my-app-service
+#             port:
+#               number: 80
+# Key Takeaway: The Ingress resource structure is standardized—switching controllers is primarily a matter of changing ingressClassName and controller-specific annotations.
