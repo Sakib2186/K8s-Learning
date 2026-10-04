@@ -1,0 +1,22 @@
+# ingress-nginx command
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+# this install ingress-nginx controller
+# check kubectl get pods -n ingress-nginx
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grade-submission-portal-ingress
+  namespace: grade-submission
+spec:
+  rules: # the ingress rules
+  #- host: <Host> # the domain name, in productio keep this and give domain, for loal use http
+  - http: # as host disbaled so i am enabling any host from any domain that has / at end to my backend service with the name provided for the cluster ip
+      paths: 
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: grade-submission-portal
+            port: 
+              number: 5001

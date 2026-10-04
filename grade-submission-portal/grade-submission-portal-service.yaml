@@ -1,19 +1,36 @@
 # portforwarding is bad
 # The service is for create node port service which uses the label selector to forward external traffic to the correct pod
 # doint do this in production only for prototyping.
+
+# Nodeport is only for development which can be used to connect localhost to 32000 to access app. It makes my IP static. 
+# But in production, in AWS for example, IP address is dynamic, always changes
+
+# so we point our domain in production to a load balancer's IP provided by AWS. Load balancer balances traffic between WORKER NODES.
+# In each WORKER NODE there is Nginx ingress proxy, which acts as a reverse proxy.
+# reverse proxy acts for server and decides where request will go. this is based on Ingress Rules
+# We write ingress rules ourself which tells which clusterIP service to go. The clusterIP then forwards to one of the pods.
+# so if we have 4 replicas for a pod clusterIP will naturally load balance them.
+# so this is pod level balancer and AWS's load balancer is of node balancer.
+
+# for backend its fine already only requires for frontend
 apiVersion: v1
 kind: Service
 metadata:
   name: grade-submission-portal
   namespace: grade-submission
 spec:
-  type: NodePort
+  type: ClusterIP # NodePort, Only for development
   selector:
     app.kubernetes.io/instance: grade-submission-portal
   ports:
   - port: 5001
     targetPort: 5001
-    nodePort: 32000 # ranges from 30000 to 32000
+    # nodePort: 32000 # ranges from 30000 to 32000 (Only for development)
+
+# ingress-nginx command
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml
+# this install ingress-nginx controller
+# check kubectl get pods -n ingress-nginx
 
 # kubectl apply -f grade-submission-portal.yaml
 # kubectl apply -f grade-submission-portal-service.yaml
