@@ -1,0 +1,47 @@
+Windows)
+This guide will walk you through installing Helm on Windows to prepare for your upcoming Helm Charts lesson.
+
+Installation Steps
+You have two main options for installing Helm on Windows:
+
+Option 1: Using Chocolatey (Recommended)
+   1.   If you don't have Chocolatey installed, install it first. Open PowerShell as Administrator and run:
+
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+   2.  Once Chocolatey is installed, use it to install Helm: choco install kubernetes-helm
+
+Option 2: Manual Installation
+Visit the official Helm GitHub releases page: https://github.com/helm/helm/releases
+
+Download the Windows amd64 version (e.g., helm-v3.x.x-windows-amd64.zip).
+
+Extract the zip file to a directory of your choice (e.g., C:\helm).
+
+Add the directory containing helm.exe to your PATH environment variable:
+
+Right-click on 'This PC' or 'My Computer' and select 'Properties'
+
+Click on 'Advanced system settings'
+
+Click on 'Environment Variables'
+
+Under 'System variables', find and select 'Path', then click 'Edit'
+
+Click 'New' and add the directory path (e.g., C:\helm)
+
+Click 'OK' to close all windows
+
+Note: The directory you add to the PATH should contain the helm.exe file. This executable is what allows you to run Helm commands from any location in the command prompt or PowerShell.
+
+Verifying the Installation
+After installation, verify that Helm is installed correctly:
+
+Open a new PowerShell window.
+
+Check the Helm version by running: helm version
+
+You should see output similar to this:
+
+version.BuildInfo{Version:"v3.x.x", GitCommit:"xxxxxxx", GitTreeState:"clean", GoVersion:"go1.xx.x"}
+Conclusion
+If you've seen the expected outputs in the verification steps, congratulations! Helm is now successfully installed on your Windows system. You're ready to proceed with your Helm lesson.

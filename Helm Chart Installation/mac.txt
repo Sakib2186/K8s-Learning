@@ -1,0 +1,22 @@
+Action Required: Installing Helm (Mac)
+This guide will walk you through installing Helm on macOS to prepare for your upcoming Helm Charts lesson.
+
+Installation Steps
+Open Terminal on your Mac.
+
+If you don't have Homebrew installed, install it first by running: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+Once Homebrew is installed, use it to install Helm: brew install helm
+
+Wait for the installation to complete. Homebrew will download and install Helm and its dependencies.
+
+Verifying the Installation
+After the installation is complete, you should verify that Helm is installed correctly:
+
+Check the Helm version by running: helm version
+
+You should see output similar to this:
+
+version.BuildInfo{Version:"v3.x.x", GitCommit:"xxxxxxx", GitTreeState:"clean", GoVersion:"go1.xx.x"}
+Conclusion
+If you've seen the expected outputs in the verification steps, congratulations! Helm is now successfully installed on your macOS system. You're ready to proceed with your Helm lesson.
