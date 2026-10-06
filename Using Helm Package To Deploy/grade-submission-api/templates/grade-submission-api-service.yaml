@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.microservice.name }} # name of the service or the endpoint with the port
+  namespace: {{ .Values.microservice.namespace }}
+spec:
+  selector:
+    app.kubernetes.io/instance: {{ .Values.microservice.name }}
+  ports:
+  - port: 3000 # service port where it listens, grade-submission-api:3000
+    targetPort: 3000 # target port of container, then it forwards requests from grade-submission-api:3000 to api pod with the port 3000
+
+  # service name = grade-submission-api
+  # service-port = 3000
+  # so it becomes, grade-submission-api:3000

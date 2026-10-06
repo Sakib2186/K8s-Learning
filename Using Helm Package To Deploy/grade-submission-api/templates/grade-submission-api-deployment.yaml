@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.microservice.name }}
+  namespace: {{ .Values.microservice.namespace }}
+spec:
+  replicas: {{ .Values.microservice.replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Values.microservice.name }} # query pods with this label and manage them
+  strategy:
+    type: RollingUpdate
+    rollUpdate:
+      maxUnavailable: 50%
+      maxSurge: 1 ## ensure max of 4 pods are created as update is on the process.
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Values.microservice.namespace }}
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: {{ .Values.microservice.name }}
+    spec:
+      containers:
+      - name: {{ .Values.microservice.name }}
+        image: {{ .Values.workload.image }} # say this image has a endpoint called healthz and readyz to check for liveliness and readiness
+        livenessProbe: # app sends 200 reponse, healthy. 500 response then not healthy (atleast 1 negative then).
+          httpGet:
+            path: /healthz
+            port: {{ .Values.workload.port }}
+          initialDelaySeconds: {{ .Values.workload.livenessDelay }} # while the app is booting up, then would throw error. Giving application time to startup.
+          periodSeconds: 5 # keep checking for healthyness every 5 seconds.
+        readinessProbe: # checks if application is successfully able to fetch external db/api otherwise stop traffic from coming
+          httpGet:
+            path: /readyz 
+            port: {{ .Values.workload.port }}
+          initialDelaySeconds: 15 # not needed for readinessProbe
+          periodSeconds: 5 # every 5 second will hit to check
+        envFrom:
+          - configMapRef:
+              name: {{ .Values.microservice.name }}-config
+          - secretRef:
+              name: {{ .Values.microservice.name }}-secret
+        resources:
+          requests:
+            memory: {{ .Values.workload.resources.memory }}
+            cpu: {{ .Values.workload.resources.cpu }}
+          limits:
+            memory: {{ .Values.workload.resources.memory }}
+        ports:
+          - containerPort:  {{ .Values.workload.port }}
+
+# so now we can delete grade-submission-api.yaml as this will manage them. But, we do need the services separately.
+# so the service will distribute the traffic to one of the three pods.
+# liveliness checks if server is running, if error or not running k8s will restart
+# readyness checks if the application is able to communicate with other external services like external DB or apis. If not then k8s will
+# prevent traffic from getting to the pods

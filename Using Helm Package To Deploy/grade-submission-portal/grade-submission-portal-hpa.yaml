@@ -1,0 +1,21 @@
+# ensure metric server is available for HPA
+# HPA = Horizontal Pod Autoscaler
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: grade-submission-portal-hpa
+  namespace: grade-submission
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: grade-submission-portal
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50 # when CPU utilization exceeds 50%, HPA will scale up the number of pods and scale down when it goes below 50%

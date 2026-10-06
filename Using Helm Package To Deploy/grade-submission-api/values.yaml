@@ -1,0 +1,16 @@
+microservice: ## general serivce details
+  name: grade-submission-api
+  namespace: grade-submission
+  replicas: 3
+
+workload: ## container specific configurations
+  image: <Image>
+  port: 3000
+  livenessDelay: 15
+  resources:
+    memory: "128Mi"
+    cpu: "128m"
+
+# to check if values are properly getting injected type this command in root director where
+# Chart.yaml and values.yaml is
+# helm template .
