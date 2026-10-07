@@ -29,10 +29,27 @@ secrets:
 
 # then to install the package
 # helm install <package name tyou want to give like "grade-submission-api"> <package created from helm package .> -n <namespace>
-# helm install grade-submission-api grade-submission-api-1.0.0.tgz
+# helm install grade-submission-api grade-submission-api-1.0.0.tgz -n grade-submission
 
 # to uninstall
 # helm uninstall <name given>
 # helm uninstall grade-submission-api
 
 # then can check all pods, services, pvc, deployments,configmaps, secrets in the namespace
+
+# to see list of all helm releases
+# helm list -A
+
+# after changin to template or values.yaml or Chart.yaml,instead of uninstalling the entire package, you can simply
+# helm package . 
+# helm upgrade <package name> <package created with new version as per Chart.yaml> -n <namespace>
+
+# or can directly skip packaging stage and do in the directory as
+# helm upgrade <package name given > . -n <namespace>
+# helm upgrade grade-submission-api . -n grade-submission
+
+# ensure to always change version before upgrading in Chart.yaml
+
+# to rollback to previous revision
+# helm rollback <package name> revision number -n <namespace>
+# helm rollback grade-submission-api 2 -n grade-submission
