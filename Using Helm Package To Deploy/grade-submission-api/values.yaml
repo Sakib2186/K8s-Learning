@@ -28,7 +28,7 @@ secrets:
 # helm package .
 
 # then to install the package
-# helm install <package name tyou want to give like "grade-submission-api"> <package created from helm package .>
+# helm install <package name tyou want to give like "grade-submission-api"> <package created from helm package .> -n <namespace>
 # helm install grade-submission-api grade-submission-api-1.0.0.tgz
 
 # to uninstall
