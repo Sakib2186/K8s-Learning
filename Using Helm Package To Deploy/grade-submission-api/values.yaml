@@ -11,6 +11,28 @@ workload: ## container specific configurations
     memory: "128Mi"
     cpu: "128m"
 
+env: ## environment Variables
+  MONGODB_HOST: mongodb
+  MONGODB_PORT: "27017"
+
+secrets:
+  MONGODB_USER: "YWRtaW4="
+  MONGODB_PASSWORD: "cm9vdHBhc3N3b3Jk"
+
 # to check if values are properly getting injected type this command in root director where
 # Chart.yaml and values.yaml is
 # helm template .
+
+
+# to create a package
+# helm package .
+
+# then to install the package
+# helm install <package name tyou want to give like "grade-submission-api"> <package created from helm package .>
+# helm install grade-submission-api grade-submission-api-1.0.0.tgz
+
+# to uninstall
+# helm uninstall <name given>
+# helm uninstall grade-submission-api
+
+# then can check all pods, services, pvc, deployments,configmaps, secrets in the namespace

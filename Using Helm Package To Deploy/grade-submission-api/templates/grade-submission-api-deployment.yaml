@@ -33,7 +33,7 @@ spec:
           httpGet:
             path: /readyz 
             port: {{ .Values.workload.port }}
-          initialDelaySeconds: 15 # not needed for readinessProbe
+          # initialDelaySeconds: 15 # not needed for readinessProbe
           periodSeconds: 5 # every 5 second will hit to check
         envFrom:
           - configMapRef:

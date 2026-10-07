@@ -7,8 +7,8 @@ spec:
   selector:
     app.kubernetes.io/instance: {{ .Values.microservice.name }}
   ports:
-  - port: 3000 # service port where it listens, grade-submission-api:3000
-    targetPort: 3000 # target port of container, then it forwards requests from grade-submission-api:3000 to api pod with the port 3000
+  - port: {{ .Values.workload.port }} # service port where it listens, grade-submission-api:3000
+    targetPort: {{ .Values.workload.port }} # target port of container, then it forwards requests from grade-submission-api:3000 to api pod with the port 3000
 
   # service name = grade-submission-api
   # service-port = 3000
