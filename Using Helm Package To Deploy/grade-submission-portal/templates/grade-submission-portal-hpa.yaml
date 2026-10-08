@@ -3,13 +3,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: grade-submission-portal-hpa
-  namespace: grade-submission
+  name: {{ .Values.microservice.name }}-hpa
+  namespace: {{ .Values.microservice.namespace }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: grade-submission-portal
+    name: {{ .Values.microservice.name }}
   minReplicas: 1
   maxReplicas: 10
   metrics:

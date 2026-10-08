@@ -16,15 +16,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grade-submission-portal
-  namespace: grade-submission
+  name: {{ .Values.microservice.name }}
+  namespace: {{ .Values.microservice.namespace }}
 spec:
   type: ClusterIP # NodePort, Only for development
   selector:
-    app.kubernetes.io/instance: grade-submission-portal
+    app.kubernetes.io/instance: {{ .Values.microservice.name }}
   ports:
-  - port: 5001
-    targetPort: 5001
+  - port: {{ .Values.workload.port }}
+    targetPort: {{ .Values.workload.port }}
     # nodePort: 32000 # ranges from 30000 to 32000 (Only for development)
 
 # ingress-nginx command

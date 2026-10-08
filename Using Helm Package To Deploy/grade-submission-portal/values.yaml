@@ -1,0 +1,20 @@
+microservice: ## general serivce details
+  name: grade-submission-portal
+  namespace: grade-submission
+  replicas: 1
+
+workload: ## container specific configurations
+  image: <Image>
+  port: 5001
+  livenessDelay: 15
+  resources:
+    memory: "128Mi"
+    cpu: "128m"
+
+# env: ## environment Variables
+#   MONGODB_HOST: mongodb
+#   MONGODB_PORT: "27017"
+
+# secrets:
+#   MONGODB_USER: "YWRtaW4="
+#   MONGODB_PASSWORD: "cm9vdHBhc3N3b3Jk"
