@@ -1,0 +1,18 @@
+useStatefulSet: true # not to deploy as a deployment
+auth:
+  enabled: false
+image: # you may have to override image as might owrk with 
+    registry: docker.io
+    repository: mongo
+    tag: 6.0.4-jammy
+persistence:
+  mountPath: /data/db
+
+# as mnongo db will run in mongodb namespace, so grade-submission wont be able to connect to it
+# so here override command as 
+# <service-name>.<service-namespace>.svc.cluster.local:<port number>
+
+# kubectl get services -n mongodb
+# you will get service name, service namspace and the port number
+# make this change in you gradesubmission api where api connects with mongodb
+# mongodb.mongodb.svc.cluster.local:27017

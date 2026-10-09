@@ -18,6 +18,7 @@ env: ## environment Variables
 secrets:
   MONGODB_USER: "YWRtaW4="
   MONGODB_PASSWORD: "cm9vdHBhc3N3b3Jk"
+  MONGODB_URI: "mongodb://mongodb.mongodb.svc.cluster.local:27017/" # authentication for mongodb stateful service using helm chart is disabled so no need now.
 
 # to check if values are properly getting injected type this command in root director where
 # Chart.yaml and values.yaml is

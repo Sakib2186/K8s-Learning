@@ -39,3 +39,31 @@ spec:
 
 # mongodb-persistent-storage-mongodb-0
 # mongodb-persistent-storage-mongodb-1
+
+
+# IMPORTANT
+# using we use helm repo to use existing repo of mongodb or postgres from Bitnami in to our local helm repo
+# which is much secured
+
+# Commands:
+# helm repo add bitnami https://charts.bitnami.com/bitnami
+# helm repo update
+
+# to see all charts i have now access to
+# helm search repo
+
+# to view all of the version of a sepecfic chart and not the latest one
+# helm search repo bitnami/mongodb --versions
+# search on github bitnami/charts to see documentation of your desire chart
+
+# to copy values from bitnami chart
+# helm show values bitnami/mongodb > default_values.yaml # dont really need this, just for me to see whether all values are ok as per provided one
+# then create your own values.yaml to override the ones from default
+# no need the custom service, secret or statefulset as now gonna use helm bitnami repos one.
+
+# once done with overriding values then install
+# helm install mongodb bitnami/mongodb --version 15.6.13 -f values.yaml -n mongodb
+# -f values.yaml tells to look at values.yaml to override
+
+# as this is a stateful set so now can see using
+# kubectl get statefulset mongofb -n mongodb
